@@ -1,0 +1,5 @@
+# TensorFlow Models
+*.keras
+
+# PyTorch Models
+*.pth
