@@ -2,8 +2,10 @@ import json
 import base64
 from io import BytesIO
 
+import os
 import streamlit as st
 from PIL import Image
+from inference import predict_image
 
 st.set_page_config(
     page_title="분리수거 이미지 안내 서비스",
@@ -397,7 +399,7 @@ st.markdown(
 # -----------------------------
 # guide data
 # -----------------------------
-with open("guide.json", "r", encoding="utf-8") as f:
+with open(os.path.join(os.path.dirname(__file__), "guide.json"), "r", encoding="utf-8") as f:
     guide_data = json.load(f)
 
 # -----------------------------
@@ -478,8 +480,7 @@ with left:
 with right:
     if uploaded_file is not None:
         # 임시 예측 결과 — 나중에 실제 AI 모델 연결 시 변경
-        predicted_class = "plastic"
-        confidence = 0.91
+        predicted_class, confidence = predict_image(image)
         class_name = guide_data[predicted_class]["name"]
         confidence_percent = confidence * 100
 
@@ -530,7 +531,7 @@ with right:
         if confidence < 0.6:
             warning_html = (
                 '<div class="warning-box">'
-                'AI가 확실하게 판단하지 못했습니다. 결과를 참고용으로 확인해주세요.'
+                '예측 신뢰도가 낮습니다. 흰색 또는 단색 배경에서 물체가 더 크게 보이도록 다시 촬영한 이미지를 업로드해 주세요.'
                 '</div>'
             )
             st.markdown(warning_html, unsafe_allow_html=True)
