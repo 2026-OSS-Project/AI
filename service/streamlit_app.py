@@ -437,11 +437,27 @@ with left:
         unsafe_allow_html=True
     )
 
-    uploaded_file = st.file_uploader(
-        "이미지를 업로드해주세요.",
-        type=["jpg", "jpeg", "png"],
-        label_visibility="collapsed"
+    input_method = st.radio(
+        "이미지 입력 방식 선택",
+        ["이미지 업로드", "카메라 촬영"],
+        horizontal=True
     )
+
+    uploaded_file = None
+
+    if input_method == "이미지 업로드":
+        uploaded_file = st.file_uploader(
+            "이미지를 업로드해주세요.",
+            type=["jpg", "jpeg", "png"],
+            label_visibility="collapsed"
+        )
+
+    else:
+        st.info("카메라 촬영 시 흰색 또는 단색 배경에서 물체가 중앙에 오도록 촬영해 주세요.")
+
+        uploaded_file = st.camera_input(
+            "카메라로 분리수거할 물건을 촬영해 주세요."
+        )
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert("RGB")
