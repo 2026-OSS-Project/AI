@@ -8,9 +8,13 @@ from PIL import Image
 
 CLASS_NAMES = ["can", "paper", "plastic", "vinyl"]
 
-MODEL_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "best_model_mobilenetv2.pth"
+MODEL_PATH = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "model",
+        "best_model_mobilenetv2.pth"
+    )
 )
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
